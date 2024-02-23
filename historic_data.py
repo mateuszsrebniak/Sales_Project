@@ -1,6 +1,7 @@
 from faker import Faker
 from itertools import count
 import random
+from datetime import datetime
 
 class Person:
 
@@ -23,39 +24,8 @@ class Customer(Person):
     def __init__(self):
         self.customerID = next(Customer.customer_count)
         super().__init__()
-        
-class Company:
-    company_count = count(start=1)
-    
-    def __init__ (self):
-        self.companyID = Company.company_count
-        self.company_name = Faker().company()
-        self.email = Faker().email()
-        self.address = Faker().address()
-        self.phone = Faker().phone()
-        
-
-class AllSalesmen:
-    def __init__(self, num_workers):
-        self.workersList = [Salesman() for _ in range(num_workers)]
-
-    def __getitem__(self, index):
-        return self.workersList[index]
-    
-class AllCustomers:
-    def __init__(self, num_customers):
-        self.customersList = [Customer() for _ in range(num_customers)]
-
-    def __getitem__(self, index):
-        return self.customersList[index]
-    
-class AllCompanies:
-    def __init__(self, num_companies):
-        self.companiesList = [Company() for _ in range(num_companies)]
-    def __getitem__(self, index):
-        return self.companiesList[index]
-    
-    
+     
+   
 class CleaningVariant:
     def __init__(self, variant_name, standard_cost_per_hour, cost_per_hour_with_outside):
         self.variant_name = variant_name
@@ -69,18 +39,19 @@ premiumCleaningVariant = CleaningVariant("Premium", 125, 180)
 VIPCleaningVariant = CleaningVariant("VIP", 250, 400)
 
 AllCleaningVariantsProbability = {
-    fastCleaningVariant:39, 
-    standardCleaningVariant:39, 
-    silverCleaningVariant:12, 
-    premiumCleaningVariant:8, 
-    VIPCleaningVariant:2
+    fastCleaningVariant:        39, 
+    standardCleaningVariant:    39, 
+    silverCleaningVariant:      12, 
+    premiumCleaningVariant:     8, 
+    VIPCleaningVariant:         2
 }
 
 class Order:
     order_count = count(start=1)
+    start_date = datetime.datetime(2024, 1, 1)
+    end_date = datetime.datetime.now()
     
-    def __init__(self, cleaning_variant: CleaningVariant,
-                 cleaning_duration, is_inside_cleaning=True, is_outside_cleaning=False, travel_distance=0):
+    def __init__(self):
         self.OrderID = next(Order.order_count)
         self.cleaning_variant = random.choices(list(AllCleaningVariantsProbability.keys()), 
                                                AllCleaningVariantsProbability.values(), k=1)[0]
@@ -88,5 +59,14 @@ class Order:
         self.is_inside_cleaning = random.choices([True, False], [0.96, 0.04], k=1)[0]
         self.is_outside_cleaning = random.choices([True, False], [0.22, 0.78], k=1)[0]
         self.travel_distance = random.randint(1,100)
+        self.salesmanID = random.choice(AllSalesmen.workersList).workerID
+        self.customerID = random.choice(AllCustomers.customersList).customerID
+        self.cleaningAddress = Faker().address()
+        self.cleaningDate = Faker().date_time_between_dates(Order.start_date, Order.end_date)
+        
+AllSalesmen = [Salesman() for _ in range(num_workers)]
+    
+AllCustomers = [Customer() for _ in range(num_customers)]
+
     
     
