@@ -72,3 +72,16 @@ class Order:
         self.customerID = random.choice(AllCustomers).customerID
         self.cleaningAddress = Faker().address()
         self.cleaningDate = Faker().date_time_between_dates(Order.start_date, Order.end_date)
+        
+class CurrentOrder(Order):
+    current_date = datetime.now().date()
+    
+    def __init__(self, SalesmenList, CustomersList):
+        self.fakeSalesman = [Salesman()]
+        self.fakeCustomer = [Customer()]
+        super().__init__(self.fakeSalesman, self.fakeCustomer)
+        self.salesmanID = random.choice(SalesmenList)
+        self.customerID = random.choice(CustomersList)
+        self.cleaningDate = CurrentOrder.current_date
+        
+        

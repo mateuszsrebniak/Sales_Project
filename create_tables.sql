@@ -53,3 +53,13 @@ REFERENCES cleaning_variants (variant_id);
 ALTER TABLE orders MODIFY is_inside_cleaning CHAR(5);
 ALTER TABLE orders MODIFY is_outside_cleaning CHAR(5);
 ALTER TABLE orders MODIFY cleaning_date VARCHAR(20);
+
+ALTER TABLE orders ADD realization_date DATE;
+
+UPDATE orders
+SET realization_date = TO_DATE(SUBSTR(cleaning_date, 1, 10), 'YYYY-MM-DD');
+
+ALTER TABLE orders DROP COLUMN cleaning_date;
+
+UPDATE orders
+SET realization_date = TO_DATE(realization_date, 'YYYY-MM-DD');
