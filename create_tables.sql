@@ -63,3 +63,32 @@ ALTER TABLE orders DROP COLUMN cleaning_date;
 
 UPDATE orders
 SET realization_date = TO_DATE(realization_date, 'YYYY-MM-DD');
+--------------------------------------------------------------------
+--------------------------------------------------------------------
+CREATE VIEW data_to_analyse AS
+-- This view contains all the data needed for my analysis and project. 
+-- It also creates three new columns storing data about the costs of orders
+WITH orders_with_costs AS (
+    SELECT
+        o.*,
+        cv.variant_name, cv.variant_standard_cost_per_hour, cv.variant_outside_cost_per_hour,
+        CASE
+            WHEN o.is_outside_cleaning = 'True' THEN o.cleaning_duration * cv.variant_outside_cost_per_hour
+            ELSE o.cleaning_duration * cv.variant_standard_cost_per_hour
+        END AS cleaning_cost_without_travel,
+        o.travel_distance * 2.2 as travel_cost
+    FROM 
+        orders o
+    RIGHT JOIN 
+        cleaning_variants cv ON o.cleaning_variant_fk = cv.variant_id
+)
+SELECT 
+    owc.*,
+    (cleaning_cost_without_travel + travel_cost) as total_cost,
+    w.worker_first_name, w.worker_last_name, 
+    c.customer_first_name, c.customer_last_name
+FROM 
+    orders_with_costs owc
+RIGHT JOIN
+    workers w ON owc.salesman_id_fk = w.worker_id
+RIGHT JOIN customers c ON owc.customer_id_fk = c.customer_id;
