@@ -65,8 +65,8 @@ class Order:
         self.cleaning_variantID = random.choices(list(AllCleaningVariantsProbability.keys()), 
                                                AllCleaningVariantsProbability.values(), k=1)[0].variantID
         self.cleaning_duration = random.randint(1,12)
-        self.is_inside_cleaning = random.choices([True, False], [0.96, 0.04], k=1)[0]
-        self.is_outside_cleaning = random.choices([True, False], [0.22, 0.78], k=1)[0]
+        self.is_inside_cleaning = random.choices(['True', 'False'], [0.96, 0.04], k=1)[0]
+        self.is_outside_cleaning = random.choices(['True', 'False'], [0.22, 0.78], k=1)[0]
         self.travel_distance = random.randint(1,100)
         self.salesmanID = random.choice(AllSalesmen).workerID
         self.customerID = random.choice(AllCustomers).customerID
