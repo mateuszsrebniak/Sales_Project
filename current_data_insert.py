@@ -28,7 +28,7 @@ allCustomers = fetch_ids_from_table("customers", "customer_id", connection)
 
 newOrdersCount = randint(60,180)
 
-newOrders = [CurrentOrder(allSalesmen, allCustomers) for _ in range(newOrdersCount)]
+newOrders = [CurrentOrder(allSalesmen, allCustomers) for _ in range(1)]
 
 cursor = connection.cursor()
 

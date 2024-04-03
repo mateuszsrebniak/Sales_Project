@@ -74,7 +74,7 @@ class Order:
         self.cleaningDate = Faker().date_time_between_dates(Order.start_date, Order.end_date)
         
 class CurrentOrder(Order):
-    current_date = datetime.now().date()
+    current_date = datetime.now().strftime('%Y-%m-%d')
     
     def __init__(self, SalesmenList, CustomersList):
         self.fakeSalesman = [Salesman()]
