@@ -2,25 +2,28 @@
 # retrieves data for the current date from a specific table, 
 # and saves the data to a CSV file.
 
-import oracledb as orcl
+import sys
+sys.path.append("c:\\Users\\Mateusz\\OneDrive\\Pulpit\\Nauka\\Python\\Sales_Project\\.venv\\Lib\\site-packages")
+import mysql.connector
 from datetime import datetime
 import pandas as pd
 import os
 
-# Oracle database connection settings
-username = "Cleaning_Company"
-password = "cleaning"
-dsn = "XEPDB1"
+# Ustawienia połączenia z bazą danych Oracle
+username = "root"
+password = "admin"
+host = "localhost"
+database = "Cleaning_Company"
 
 # Establish connection to Oracle database
-connection = orcl.connect(user=username, password=password, dsn=dsn)
+connection = mysql.connector.connect(user=username, password=password, host=host, database=database)
 cursor = connection.cursor()
 
 # Get current date
-current_date = str(datetime.now().date())
+current_date = datetime.now().strftime('%Y-%m-%d')
 
 # SQL query to retrieve data for the current date
-query = f"SELECT * FROM data_to_analyse WHERE realization_date = TO_DATE('{current_date}', 'YYYY-MM-DD')"
+query = f"SELECT * FROM orders_with_costs WHERE cleaning_date = '{current_date}';"
 result_data_frame = pd.read_sql(query, connection)
 
 # Define the path to the folder to store the file
