@@ -67,6 +67,9 @@ class Order:
         self.cleaning_duration = random.randint(1,12)
         self.is_inside_cleaning = random.choices(['True', 'False'], [0.96, 0.04], k=1)[0]
         self.is_outside_cleaning = random.choices(['True', 'False'], [0.22, 0.78], k=1)[0]
+        if not self.is_inside_cleaning and not self.is_outside_cleaning:
+            # If both are False, set one of them to True
+            self.is_inside_cleaning = True
         self.travel_distance = random.randint(1,100)
         self.salesmanID = random.choice(AllSalesmen).workerID
         self.customerID = random.choice(AllCustomers).customerID

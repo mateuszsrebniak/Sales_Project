@@ -3,7 +3,11 @@
         -- I już na pierwszy rzut oka widzę, że w tabeli 'Orders' mam:
                 --  jeden rekord z wartością NULL
                 --  w kolumnach 'is_inside_cleaning' oraz 'is_outside_cleaning' znajdują się po cztery różne
-                --  wartości, choć powinny znajdować się po dwie: True lub False
+                        --  wartości, choć powinny znajdować się po dwie: True lub False
+                --  w kolumnach 'is_inside_cleaning' oraz 'is_outside_cleaning' znajdować mogą się wyłącznie
+                        -- wartości True lub False i skoro doszło do realizacji, to przynajmniej jedna z kolumn
+                        -- powinna zawierać wartość True. Znajduję jednak rekordy, gdzie obie kolumny mają
+                        -- wartość False
         -- W tabeli 'Customers':
                 --  przy 1088 różnych klientach znajduje się tylko 1086 unikatowych adresów e-mail
 
@@ -57,3 +61,16 @@ SET
         -- sprawdzić, czy wszyscy klienci są klientami aktywnymi, czy zamawiają sprzątanie
         -- osatecznie ocenić, czy w danym projekcie adresy e-mail będą potrzebne do realizacji celu.
         -- w moim przypadku adresy email nie są potrzebne
+
+--PROBLEM:
+        --  w kolumnach 'is_inside_cleaning' oraz 'is_outside_cleaning' znajdować mogą się wyłącznie
+        -- wartości True lub False i skoro doszło do realizacji, to przynajmniej jedna z kolumn
+        -- powinna zawierać wartość True. Znajduję jednak rekordy, gdzie obie kolumny mają
+        -- wartość False
+--ROZWIĄZANIE:
+        -- Problem ma swoje źródło w kodzie Python generującym kolejne rekordy. Nie uwzględniłem tam warunku
+        -- mówiącego, że przynajmniej jedna kolumna musi mieć wartość True
+        -- Do kodu w Python dodałem warunek if:
+        if not self.is_inside_cleaning and not self.is_outside_cleaning:
+            self.is_inside_cleaning = True
+        -- Zostawię jednak błędne dane w swoim zbiorze, by w ramach nauki mieć problem do nauki.
