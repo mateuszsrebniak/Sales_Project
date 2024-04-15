@@ -65,10 +65,10 @@ UPDATE orders
 SET realization_date = TO_DATE(realization_date, 'YYYY-MM-DD');
 --------------------------------------------------------------------
 --------------------------------------------------------------------
-CREATE VIEW data_to_analyse AS
+CREATE VIEW orders_with_costs AS
 -- This view contains all the data needed for my analysis and project. 
 -- It also creates three new columns storing data about the costs of orders
-WITH orders_with_costs AS (
+WITH temp_table AS (
     SELECT
         o.*,
         cv.variant_name, cv.variant_standard_cost_per_hour, cv.variant_outside_cost_per_hour,
@@ -83,12 +83,12 @@ WITH orders_with_costs AS (
         cleaning_variants cv ON o.cleaning_variant_fk = cv.variant_id
 )
 SELECT 
-    owc.*,
+    tb.*,
     (cleaning_cost_without_travel + travel_cost) as total_cost,
     w.worker_first_name, w.worker_last_name, 
     c.customer_first_name, c.customer_last_name
 FROM 
-    orders_with_costs owc
+    temp_table tb
 RIGHT JOIN
-    workers w ON owc.salesman_id_fk = w.worker_id
-RIGHT JOIN customers c ON owc.customer_id_fk = c.customer_id;
+    workers w ON tb.salesman_id_fk = w.worker_id
+RIGHT JOIN customers c ON tb.customer_id_fk = c.customer_id;
