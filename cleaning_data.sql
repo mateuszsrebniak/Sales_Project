@@ -74,3 +74,5 @@ SET
         if not self.is_inside_cleaning and not self.is_outside_cleaning:
             self.is_inside_cleaning = True
         -- Zostawię jednak błędne dane w swoim zbiorze, by w ramach nauki mieć problem do nauki.
+        -- Ostatecznie uznałem, że bezpieczniej będzie każdemu takiemu problematycznemu rekordowi
+        -- przypisać niższą wartość. Pomoże to uniknąć przeszacowania sprzedaży.
