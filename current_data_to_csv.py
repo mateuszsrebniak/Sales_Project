@@ -5,7 +5,7 @@
 import sys
 sys.path.append("c:\\Users\\Mateusz\\OneDrive\\Pulpit\\Nauka\\Python\\Sales_Project\\.venv\\Lib\\site-packages")
 import mysql.connector
-from datetime import datetime
+from datetime import datetime, timedelta
 import pandas as pd
 import os
 
@@ -20,7 +20,8 @@ connection = mysql.connector.connect(user=username, password=password, host=host
 cursor = connection.cursor()
 
 # Get current date
-current_date = datetime.now().strftime('%Y-%m-%d')
+yesterday_date = datetime.now()- timedelta(days=1)
+current_date = yesterday_date.strftime('%Y-%m-%d') 
 
 # SQL query to retrieve data for the current date
 query = f"SELECT * FROM orders_with_costs WHERE cleaning_date = '{current_date}';"
